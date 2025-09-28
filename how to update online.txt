@@ -1,0 +1,6 @@
+git add reports\catalog\excel_generator_fn.py # Windows path works; or use forward slashes
+
+git commit -m "Update excel_generator_fn: <short note of change>"
+
+git push origin main
+

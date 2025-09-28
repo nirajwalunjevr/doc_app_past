@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -11,14 +12,16 @@ from firebase_admin import credentials, initialize_app
 
 from reports.catalog.generate_full_report_fn import generate_catalog_report
 
-# Firebase Admin initialization (service account path provided via env)
-FIREBASE_CREDENTIALS = os.environ.get("FIREBASE_CREDENTIALS")
-if not FIREBASE_CREDENTIALS:
+# Firebase Admin initialization (from environment variable)
+FIREBASE_CREDENTIALS_JSON = os.environ.get("FIREBASE_KEY")
+if not FIREBASE_CREDENTIALS_JSON:
     raise RuntimeError(
-        "FIREBASE_CREDENTIALS env var not set. Point it to your service account JSON path."
+        "FIREBASE_KEY env var not set. Paste your service account JSON here."
     )
 
-cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+# Load credentials from JSON string
+cred_dict = json.loads(FIREBASE_CREDENTIALS_JSON)
+cred = credentials.Certificate(cred_dict)
 initialize_app(cred)
 
 app = FastAPI(title="Catalog Report Service")
